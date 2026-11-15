@@ -9,7 +9,7 @@ def top_ten(subreddit):
     Print OK if the subreddit is invalid or the request fails.
     """
     if subreddit is None or not isinstance(subreddit, str):
-        print("OK", end="")
+        pass
         return
 
     url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
@@ -22,17 +22,17 @@ def top_ten(subreddit):
         response = requests.get(url, headers=headers, params=params,
                                 allow_redirects=False)
     except requests.RequestException:
-        print("OK", end="")
+        pass
         return
 
     if response.status_code != 200:
-        print("OK", end="")
+        pass
         return
 
     try:
         posts = response.json().get("data", {}).get("children", [])
     except ValueError:
-        print("OK", end="")
+        pass
         return
 
     for post in posts:
