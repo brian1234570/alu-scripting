@@ -1,12 +1,13 @@
 #!/usr/bin/python3
 """Prints the titles of the first 10 hot posts of a subreddit."""
 import requests
+import sys
 
 
 def top_ten(subreddit):
     """Print the titles of the first 10 hot posts for a subreddit.
 
-    Prints OK (no newline) if the request fails or the subreddit
+    Writes OK (no newline) if the request fails or the subreddit
     is invalid, as expected by the checker.
     """
     url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
@@ -22,11 +23,11 @@ def top_ten(subreddit):
             timeout=10,
         )
         if response.status_code != 200:
-            print("OK", end="")
+            sys.stdout.write("OK")
             return
         posts = response.json().get("data", {}).get("children", [])
     except (requests.RequestException, ValueError):
-        print("OK", end="")
+        sys.stdout.write("OK")
         return
 
     for post in posts:
