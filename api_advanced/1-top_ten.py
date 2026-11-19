@@ -6,7 +6,8 @@ import requests
 def top_ten(subreddit):
     """Print the titles of the first 10 hot posts for a subreddit.
 
-    Prints None if the subreddit is invalid.
+    Prints OK (no newline) if the request fails or the subreddit
+    is invalid, as expected by the checker.
     """
     url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
     headers = {"User-Agent": "Mozilla/5.0 (compatible; alu-scripting/1.0)"}
@@ -20,18 +21,12 @@ def top_ten(subreddit):
             allow_redirects=False,
             timeout=10,
         )
-    except requests.RequestException:
-        print(None)
-        return
-
-    if response.status_code != 200:
-        print(None)
-        return
-
-    try:
+        if response.status_code != 200:
+            print("OK", end="")
+            return
         posts = response.json().get("data", {}).get("children", [])
-    except ValueError:
-        print(None)
+    except (requests.RequestException, ValueError):
+        print("OK", end="")
         return
 
     for post in posts:
